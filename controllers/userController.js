@@ -1,6 +1,7 @@
-const { User } = require("../models/models");
-const ApiError = require("../errors/ApiError");
 const bcrypt = require("bcrypt");
+
+const { User, Wallet } = require("../models/models");
+const ApiError = require("../errors/ApiError");
 
 async function getUser({ id = null }) {
   const user = await User.findOne({ where: { id } });
@@ -10,7 +11,7 @@ async function getUser({ id = null }) {
 
 async function createUser({ input }) {
   const hashPassword = await bcrypt.hash(input.password, 4);
-  
+
   const user = await User.create({
     name: input.name,
     surname: input.surname,
@@ -19,6 +20,8 @@ async function createUser({ input }) {
     passport: input.passport,
     password: hashPassword,
   });
+
+  const wallet = await Wallet.create({ userId: user.id });
 
   return user;
 }
