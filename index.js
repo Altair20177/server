@@ -3,7 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const request = require("request");
 const cors = require("cors");
-
 const { graphqlHTTP } = require("express-graphql");
 
 const schema = require("./schema");
@@ -14,7 +13,8 @@ const {
   getFreshDataAboutWallet,
   getCryptAbout,
   getPagesAmount,
-} = require("./requests");
+} = require("./controllers/requestsToCoincapController");
+const { getUser, createUser } = require("./controllers/userController");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +23,8 @@ const root = {
   getFreshDataAboutWallet,
   getCryptAbout,
   getPagesAmount,
+  getUser,
+  createUser,
 };
 
 app.use(cors());

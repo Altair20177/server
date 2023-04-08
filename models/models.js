@@ -3,11 +3,13 @@ const { DataTypes } = require("sequelize");
 
 const User = sequelize.define("user", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  userRole: { type: DataTypes.STRING },
+  // userRole: { type: DataTypes.STRING },
   name: { type: DataTypes.STRING },
   surname: { type: DataTypes.STRING },
-  phone: { type: DataTypes.STRING },
   email: { type: DataTypes.STRING, unique: true },
+  passport: { type: DataTypes.STRING, unique: true },
+  age: { type: DataTypes.INTEGER },
+  password: { type: DataTypes.STRING },
 });
 
 const Wallet = sequelize.define("wallet", {
@@ -15,7 +17,7 @@ const Wallet = sequelize.define("wallet", {
   balanceUSD: { type: DataTypes.FLOAT },
 });
 
-const Cryptocurrency = sequelize.define("cryptocurrency", {
+const Cryptocurrency = sequelize.define("cryptocurrency_in_wallet", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   cryptoName: { type: DataTypes.STRING },
   amount: { type: DataTypes.FLOAT },
