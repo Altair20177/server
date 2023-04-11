@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 
-const { User, Wallet } = require("../models/models");
+const { User, Wallet, TopCryptocurrencies } = require("../models/models");
 const ApiError = require("../errors/ApiError");
 
 async function getUser({ id = null }) {
@@ -26,7 +26,14 @@ async function createUser({ input }) {
   return user;
 }
 
+async function getTopCryptsForUser({ id = null }) {
+  const topCrypts = await TopCryptocurrencies.findAll({ userId: id });
+
+  return topCrypts;
+}
+
 module.exports = {
   getUser,
   createUser,
+  getTopCryptsForUser
 };

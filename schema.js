@@ -12,6 +12,14 @@ const schema = buildSchema(`
         wallet: Wallet
     }
 
+    type UsersTopCrypts{
+        topCrypts: [Crypt]
+    }
+
+    input UsersTopCryptsInput{
+        topCrypts: [CryptInput]
+    }
+
     input UserInput{
         id: ID
         age: Int!

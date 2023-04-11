@@ -23,14 +23,23 @@ const Cryptocurrency = sequelize.define("cryptocurrency_in_wallet", {
   amount: { type: DataTypes.FLOAT },
 });
 
+const TopCryptocurrencies = sequelize.define("top_cryptocurrencies", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  cryptoName: { type: DataTypes.STRING },
+});
+
 User.hasOne(Wallet);
 Wallet.belongsTo(User);
 
 Wallet.hasMany(Cryptocurrency);
 Cryptocurrency.belongsTo(Wallet);
 
+User.hasMany(TopCryptocurrencies);
+TopCryptocurrencies.belongsTo(User);
+
 module.exports = {
   User,
   Wallet,
   Cryptocurrency,
+  TopCryptocurrencies,
 };
