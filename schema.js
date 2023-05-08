@@ -113,8 +113,14 @@ const schema = buildSchema(`
         type: String
     }
 
+    type UserReturn{
+        user: User
+        topCrypts: [Crypt]
+        cryptsInWallet: [Crypt]
+    }
+
     type Query{
-        getUser(id: ID): User
+        getUser(email: String, password: String): UserReturn
         getAllCrypts(offset: Int, limit: Int): [Crypt]
         getCryptAbout(id: ID): CryptAbout
         getPagesAmount: Int

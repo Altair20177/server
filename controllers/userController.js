@@ -1,12 +1,46 @@
+const fetch = require("node-fetch");
 const bcrypt = require("bcrypt");
 
-const { User, Wallet, TopCryptocurrencies } = require("../models/models");
+const {
+  User,
+  Wallet,
+  TopCryptocurrencies,
+  Cryptocurrency,
+} = require("../models/models");
 const ApiError = require("../errors/ApiError");
 
-async function getUser({ id = null }) {
-  const user = await User.findOne({ where: { id } });
+async function getCryptsData(crypts) {
+  const ids = crypts.map((crypt) => crypt.cryptoName);
 
-  return user ? user : ApiError.badRequest("Пользователь не найден!");
+  const cryptsFetchPromise = await fetch(
+    `https://api.coincap.io/v2/assets?ids=${ids}`
+  );
+  const cryptsFetch = await cryptsFetchPromise.json();
+
+  return cryptsFetch.data;
+}
+
+async function getUser({ email = null, password = email }) {
+  const user = await User.findOne({ where: { email } });
+
+  if (!user) {
+    return ApiError.badRequest("Пользователь не найден!");
+  }
+
+  const wallet = await Wallet.findOne({ where: { userId: user.id } });
+  const cryptsInWallet = await Cryptocurrency.findAll({
+    where: { walletId: wallet.id },
+  });
+  const topCrypts = await TopCryptocurrencies.findAll({
+    where: { userId: user.id },
+  });
+
+  const cryptsWalletData = await getCryptsData(cryptsInWallet);
+  const cryptsTopData = await getCryptsData(topCrypts);
+
+  return user.password === password
+    ? { user, topCrypts: cryptsTopData, cryptsInWallet: cryptsWalletData }
+    : ApiError.badRequest("Неверный пароль!");
 }
 
 async function createUser({ input }) {
@@ -26,14 +60,7 @@ async function createUser({ input }) {
   return user;
 }
 
-async function getTopCryptsForUser({ id = null }) {
-  const topCrypts = await TopCryptocurrencies.findAll({ userId: id });
-
-  return topCrypts;
-}
-
 module.exports = {
   getUser,
   createUser,
-  getTopCryptsForUser
 };
