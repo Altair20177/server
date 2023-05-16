@@ -33,7 +33,7 @@ const schema = buildSchema(`
 
     type Wallet{
         id: ID
-        walletEntries: [WalletEntry]
+        balanceUSD: Float    
     }
 
     input WalletInput{
@@ -113,10 +113,25 @@ const schema = buildSchema(`
         type: String
     }
 
+    type CryptInWallet{
+        id: ID
+        rank: String
+        symbol: String
+        name: String
+        supply: String
+        maxSupply: String
+        marketCapUsd: String
+        volumeUsd24Hr: String
+        priceUsd: String
+        changePercent24Hr: String
+        amount: Float
+    }
+
     type UserReturn{
         user: User
         topCrypts: [Crypt]
-        cryptsInWallet: [Crypt]
+        cryptsInWallet: [CryptInWallet]
+        balanceUSD: Float
     }
 
     type Query{
@@ -129,6 +144,8 @@ const schema = buildSchema(`
 
     type Mutation{
         createUser(input: UserInput): User
+        replenishBalance(id: ID, amount: Float): Wallet
+        updateUser(id: ID, name: String, surname: String, passport: String, email: String, age: Int, oldPassword: String, newPassword: String, newPasswordRepeat: String): User
     }
 `);
 

@@ -14,7 +14,12 @@ const {
   getCryptAbout,
   getPagesAmount,
 } = require("./controllers/requestsToCoincapController");
-const { getUser, createUser } = require("./controllers/userController");
+const {
+  getUser,
+  createUser,
+  updateUser,
+  replenishBalance,
+} = require("./controllers/userController");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +30,8 @@ const root = {
   getPagesAmount,
   getUser,
   createUser,
+  updateUser,
+  replenishBalance,
 };
 
 app.use(cors());
